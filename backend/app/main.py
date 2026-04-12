@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routers import produtos
 
 app = FastAPI(
     title="Sistema de Compras Online",
@@ -15,10 +16,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(produtos.router)
+
 @app.get("/", tags=["Health"])
 def health_check():
     return {"status": "ok", "message": "API rodando com sucesso!"}
-
 
 if __name__ == "__main__":
     import uvicorn
