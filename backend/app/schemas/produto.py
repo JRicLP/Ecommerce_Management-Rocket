@@ -20,3 +20,9 @@ class ProdutoResponse(ProdutoBase):
     id_produto: str
     class Config:
         from_attributes = True
+class PaginacaoResponse(BaseModel):
+    produtos: list[ProdutoResponse]
+    total: int
+    pagina: int
+    total_paginas: int
+    

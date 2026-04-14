@@ -1,21 +1,32 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 import { produtosService } from '../services/api'
-import type { Produto, AvaliacoesProduto } from '../types'
+import type { Produto, AvaliacoesProduto, VendasProduto } from '../types'
 import Navbar from '../components/Navbar'
 import StarRating from '../components/StarRating'
 import ConfirmModal from '../components/ConfirmModal'
+import Toast from '../components/Toast'
 import { getImagemCategoria } from '../utils/categoriaImagens'
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const [produto, setProduto] = useState<Produto | null>(null)
   const [avaliacoes, setAvaliacoes] = useState<AvaliacoesProduto | null>(null)
+  const [vendas, setVendas] = useState<VendasProduto | null>(null)
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState('')
   const [confirmarDelete, setConfirmarDelete] = useState(false)
   const [deletando, setDeletando] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (location.state?.mensagem) {
+      setToast(location.state.mensagem)
+      window.history.replaceState({}, '')
+    }
+  }, [location.state])
 
   useEffect(() => {
     if (!id) {
@@ -23,20 +34,24 @@ export default function ProductDetails() {
       setLoading(false)
       return
     }
+
     async function carregar() {
       try {
-        const [resProduto, resAvaliacoes] = await Promise.all([
+        const [resProduto, resAvaliacoes, resVendas] = await Promise.all([
           produtosService.detalhar(id!),
           produtosService.avaliacoes(id!),
+          produtosService.vendas(id!),
         ])
         setProduto(resProduto.data)
         setAvaliacoes(resAvaliacoes.data)
+        setVendas(resVendas.data)
       } catch {
         setErro('Produto não encontrado ou erro ao carregar dados.')
       } finally {
         setLoading(false)
       }
     }
+
     carregar()
   }, [id])
 
@@ -45,7 +60,9 @@ export default function ProductDetails() {
     try {
       setDeletando(true)
       await produtosService.deletar(id)
-      navigate('/')
+      navigate('/', {
+        state: { mensagem: `"${produto?.nome_produto}" removido com sucesso.` },
+      })
     } catch {
       setErro('Erro ao deletar produto. Tente novamente.')
       setConfirmarDelete(false)
@@ -84,6 +101,36 @@ export default function ProductDetails() {
     { label: 'Largura', valor: produto.largura_centimetros, unidade: 'cm' },
   ]
 
+  const indicadoresVendas = vendas
+    ? [
+        {
+          label: 'Unidades vendidas',
+          valor: vendas.quantidade_vendida.toLocaleString('pt-BR'),
+        },
+        {
+          label: 'Receita total',
+          valor: vendas.receita_total.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }),
+        },
+        {
+          label: 'Frete total',
+          valor: vendas.frete_total.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }),
+        },
+        {
+          label: 'Ticket médio',
+          valor: vendas.ticket_medio.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }),
+        },
+      ]
+    : []
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -102,6 +149,7 @@ export default function ProductDetails() {
           <p className="text-red-500 text-sm mb-4">{erro}</p>
         )}
 
+        {/* Card principal — imagem, nome, categoria e medidas */}
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
           <img
             src={getImagemCategoria(produto.categoria_produto)}
@@ -159,6 +207,24 @@ export default function ProductDetails() {
           </div>
         </div>
 
+        {/* Card de vendas */}
+        {vendas && indicadoresVendas.length > 0 && (
+          <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Desempenho de vendas
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {indicadoresVendas.map(({ label, valor }) => (
+                <div key={label} className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500">{label}</p>
+                  <p className="text-base font-medium text-gray-800">{valor}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Card de avaliações */}
         {avaliacoes && (
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
@@ -194,16 +260,27 @@ export default function ProductDetails() {
                           {av.titulo_comentario}
                         </p>
                       )}
-                    {av.comentario && av.comentario !== 'Sem comentário' && (
-                      <p className="text-sm text-gray-600">{av.comentario}</p>
-                    )}
+                    {av.comentario &&
+                      av.comentario !== 'Sem comentário' && (
+                        <p className="text-sm text-gray-600">{av.comentario}</p>
+                      )}
                   </div>
                 ))}
               </div>
             )}
           </div>
         )}
+
       </main>
+
+      {/* Toast — fora do main para ficar fixo na tela */}
+      {toast && (
+        <Toast
+          mensagem={toast}
+          tipo="sucesso"
+          onFechar={() => setToast(null)}
+        />
+      )}
     </div>
   )
 }

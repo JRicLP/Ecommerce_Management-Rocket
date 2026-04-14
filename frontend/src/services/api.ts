@@ -1,11 +1,14 @@
 import axios from 'axios'
-import type { Produto, ProdutoCreate, ProdutoUpdate, AvaliacoesProduto } from '../types'
+import type { Produto, ProdutoCreate, ProdutoUpdate, AvaliacoesProduto, VendasProduto, PaginacaoProdutos } from '../types'
 
 const api = axios.create({baseURL: 'http://localhost:8000',})
 
 export const produtosService = {
+  vendas: (id: string) =>
+  api.get<VendasProduto>(`/produtos/${id}/vendas`),
+
   listar: (skip = 0, limit = 20) =>
-    api.get<Produto[]>(`/produtos/`, { params: { skip, limit } }),
+  api.get<PaginacaoProdutos>(`/produtos/`, { params: { skip, limit } }),
 
   buscar: (q: string) =>
     api.get<Produto[]>(`/produtos/search`, { params: { q } }),

@@ -73,10 +73,14 @@ export default function ProductFormulary() {
       setErro('')
       if (editando && id) {
         await produtosService.atualizar(id, form)
-        navigate(`/produtos/${id}`)
+        navigate(`/produtos/${id}`, {
+          state: { mensagem: 'Produto atualizado com sucesso.' },
+        })
       } else {
         const res = await produtosService.criar(form)
-        navigate(`/produtos/${res.data.id_produto}`)
+        navigate(`/produtos/${res.data.id_produto}`, {
+          state: { mensagem: 'Produto criado com sucesso.' },
+        })
       }
     } catch {
       setErro('Erro ao salvar produto. Tente novamente.')

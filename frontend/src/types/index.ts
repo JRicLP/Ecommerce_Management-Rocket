@@ -36,4 +36,18 @@ export interface ProdutoCreate {
 
 }
 
+export interface VendasProduto {
+  quantidade_vendida: number
+  receita_total: number
+  frete_total: number
+  ticket_medio: number
+}
+
+export interface PaginacaoProdutos {
+  produtos: Produto[]
+  total: number
+  pagina: number
+  total_paginas: number
+}
+
 export interface ProdutoUpdate extends Partial<ProdutoCreate> {}

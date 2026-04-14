@@ -5,6 +5,7 @@ from app.models.item_pedido import ItemPedido
 from app.models.avaliacao_pedido import AvaliacaoPedido
 from app.schemas.produto import ProdutoCreate, ProdutoUpdate
 import uuid
+from app.models.item_pedido import ItemPedido
 
 # Produtos:
 
@@ -68,3 +69,31 @@ def get_media_avaliacoes(db: Session, id_produto: str):
         .scalar()
     )
     return round(resultado, 2) if resultado else 0.0
+
+def get_vendas_por_produto(db: Session, id_produto: str):
+    itens = (
+        db.query(ItemPedido)
+        .filter(ItemPedido.id_produto == id_produto)
+        .all()
+    )
+    quantidade = len(itens)
+    receita = sum(item.preco_BRL for item in itens)
+    frete = sum(item.preco_frete for item in itens)
+    ticket = receita / quantidade if quantidade > 0 else 0.0
+
+    return {
+        "quantidade_vendida": quantidade,
+        "receita_total": round(receita, 2),
+        "frete_total": round(frete, 2),
+        "ticket_medio": round(ticket, 2),
+    }
+
+def get_total_produtos(db: Session, q: str = '') -> int:
+    query = db.query(Produto)
+    if q:
+        termo = f"%{q}%"
+        query = query.filter(
+            Produto.nome_produto.ilike(termo) |
+            Produto.categoria_produto.ilike(termo)
+        )
+    return query.count()
