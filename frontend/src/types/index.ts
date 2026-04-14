@@ -2,7 +2,7 @@ export interface Produto {
     id_produto: string // Obrigatorio
     nome_produto: string // Obrigatorio
     categoria_produto: string // Obrigatorio
-    peso_produto_grama: number | null // Obrigatorio
+    peso_produto_gramas: number | null // Obrigatorio
     comprimento_centimetros: number | null // Obrigatorio
     altura_centimetros: number | null // Obrigatorio
     largura_centimetros: number | null // Obrigatorio

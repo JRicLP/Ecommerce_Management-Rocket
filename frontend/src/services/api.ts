@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Produto, ProdutoCreate, ProdutoUpdate, AvaliacoesProduto } from '../types'
+import type { Produto, ProdutoCreate, ProdutoUpdate, AvaliacoesProduto } from '../types'
 
 const api = axios.create({baseURL: 'http://localhost:8000',})
 
