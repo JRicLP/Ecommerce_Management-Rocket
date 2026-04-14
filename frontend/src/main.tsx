@@ -5,6 +5,7 @@ import './index.css'
 import Catalog from './pages/Catalog'
 import ProductDetails from './pages/ProductDetails'
 import ProductFormulary from './pages/ProductFormulary'
+import NotFound from './pages/NotFound'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/produtos/:id" element={<ProductDetails />} />
         <Route path="/produtos/novo" element={<ProductFormulary />} />
         <Route path="/produtos/:id/editar" element={<ProductFormulary />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
