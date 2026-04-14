@@ -106,7 +106,7 @@ npm run dev
 O frontend estará disponível em: [http://localhost:5173](http://localhost:5173)
 
 ---
-
+```text
 ## Estrutura do projeto
 
 Ecommerce_Management-Rocket/
@@ -135,23 +135,25 @@ Ecommerce_Management-Rocket/
 │   ├── requirements.txt
 │   └── .env.example
 └── frontend/
-└── src/
-├── components/           # Componentes reutilizáveis
-│   ├── Navbar.tsx
-│   ├── StarRating.tsx
-│   ├── ConfirmModal.tsx
-│   └── Toast.tsx
-├── pages/                # Páginas da aplicação
-│   ├── Catalog.tsx
-│   ├── ProductDetails.tsx
-│   ├── ProductFormulary.tsx
-│   └── NotFound.tsx
-├── services/
-│   └── api.ts            # Serviço centralizado de API
-├── types/
-│   └── index.ts          # Interfaces TypeScript
-└── utils/
-└── categoriaImagens.ts  # Mapeamento de imagens por categoria
+    └── src/
+        ├── components/           # Componentes reutilizáveis
+        │   ├── Navbar.tsx
+        │   ├── StarRating.tsx
+        │   ├── ConfirmModal.tsx
+        │   └── Toast.tsx
+        ├── pages/                # Páginas da aplicação
+        │   ├── Catalog.tsx
+        │   ├── ProductDetails.tsx
+        │   ├── ProductFormulary.tsx
+        │   └── NotFound.tsx
+        ├── services/
+        │   └── api.ts            # Serviço centralizado de API
+        ├── types/
+        │   └── index.ts          # Interfaces TypeScript
+        └── utils/
+            └── categoriaImagens.ts # Mapeamento de imagens
+```
+
 ---
 
 ## Funcionalidades
