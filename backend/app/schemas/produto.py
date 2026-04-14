@@ -1,5 +1,8 @@
+# Imports:
 from pydantic import BaseModel
 from typing import Optional
+
+# Classe para a tipagem das metricas do produto
 class ProdutoBase(BaseModel):
     nome_produto: str
     categoria_produto: str
@@ -9,6 +12,8 @@ class ProdutoBase(BaseModel):
     largura_centimetros: Optional[float] = None
 class ProdutoCreate(ProdutoBase):
     pass
+
+# Classe para a tipagem da atualizacao
 class ProdutoUpdate(BaseModel):
     nome_produto: Optional[str] = None
     categoria_produto: Optional[str] = None
@@ -20,6 +25,8 @@ class ProdutoResponse(ProdutoBase):
     id_produto: str
     class Config:
         from_attributes = True
+
+# Classe para a tipagem dos elementos da exibicao 
 class PaginacaoResponse(BaseModel):
     produtos: list[ProdutoResponse]
     total: int

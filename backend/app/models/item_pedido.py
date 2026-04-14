@@ -1,9 +1,9 @@
+# Imports:
 from sqlalchemy import String, Float, Integer, ForeignKey, PrimaryKeyConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.database import Base
 
-
+# Classe para o item solicitado
 class ItemPedido(Base):
     __tablename__ = "itens_pedidos"
 

@@ -1,3 +1,4 @@
+# Imports:
 import csv
 import os
 from datetime import datetime
@@ -9,7 +10,11 @@ from app.models.pedido import Pedido
 from app.models.item_pedido import ItemPedido
 from app.models.avaliacao_pedido import AvaliacaoPedido
 
+# CSV:
+
 CSV_DIR = os.path.join(os.path.dirname(__file__), "csvs")
+
+# Tipagem:
 
 def parse_float(value):
     try:
@@ -29,6 +34,9 @@ def parse_date(value):
     except ValueError:
         return None
 
+# Povoamento:
+
+"""Povoamento - Consumidores"""
 def seed_consumidores(db):
     with open(os.path.join(CSV_DIR, "consumidores.csv"), newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -42,6 +50,7 @@ def seed_consumidores(db):
     db.commit()
     print("Consumidores inseridos.")
 
+"""Povoamento - Produtos"""
 def seed_produtos(db):
     with open(os.path.join(CSV_DIR, "produtos.csv"), newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -57,6 +66,7 @@ def seed_produtos(db):
     db.commit()
     print("Produtos inseridos.")
 
+"""Povoamento - Vendedores"""
 def seed_vendedores(db):
     with open(os.path.join(CSV_DIR, "vendedores.csv"), newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -70,6 +80,7 @@ def seed_vendedores(db):
     db.commit()
     print("Vendedores inseridos.")
 
+"""Povoamento - Pedidos"""
 def seed_pedidos(db):
     with open(os.path.join(CSV_DIR, "pedidos.csv"), newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -88,6 +99,7 @@ def seed_pedidos(db):
     db.commit()
     print("Pedidos inseridos.")
 
+"""Povoamento - Itens pedidos"""
 def seed_itens_pedidos(db):
     with open(os.path.join(CSV_DIR, "itens_pedidos.csv"), newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
@@ -102,6 +114,7 @@ def seed_itens_pedidos(db):
     db.commit()
     print("Itens de pedidos inseridos.")
 
+"""Povoamento - Avaliacoes"""
 def seed_avaliacoes(db):
     inseridos = set()
     ignorados = 0

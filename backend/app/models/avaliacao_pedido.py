@@ -1,12 +1,11 @@
+#Imports:
 from datetime import datetime
 from typing import Optional
-
 from sqlalchemy import String, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.database import Base
 
-
+# Classe para a avaliacao de pedidos
 class AvaliacaoPedido(Base):
     __tablename__ = "avaliacoes_pedidos"
 

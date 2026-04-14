@@ -1,12 +1,11 @@
+# Imports:
 from datetime import datetime, date
 from typing import Optional
-
 from sqlalchemy import String, Float, DateTime, Date, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.database import Base
 
-
+# Classe para o pedido
 class Pedido(Base):
     __tablename__ = "pedidos"
 

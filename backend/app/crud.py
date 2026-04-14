@@ -1,3 +1,4 @@
+# Imports:
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.models.produto import Produto
@@ -9,12 +10,15 @@ from app.models.item_pedido import ItemPedido
 
 # Produtos:
 
+"""Retorno dos produtos"""
 def get_produtos(db: Session, skip: int = 0, limit: int = 20):
     return db.query(Produto).offset(skip).limit(limit).all()
 
+"""Retorno dos produtos por id"""
 def get_produto(db: Session, id_produto: str):
     return db.query(Produto).filter(Produto.id_produto == id_produto).first()
 
+"""Busca dos produtos"""
 def search_produtos(db: Session, q: str):
     termo = f"%{q}%"
     return db.query(Produto).filter(
@@ -22,6 +26,7 @@ def search_produtos(db: Session, q: str):
         Produto.categoria_produto.ilike(termo)
     ).all()
 
+"""Criacao dos produtos"""
 def create_produto(db: Session, produto: ProdutoCreate):
     db_produto = Produto(
         id_produto=uuid.uuid4().hex,
@@ -32,6 +37,7 @@ def create_produto(db: Session, produto: ProdutoCreate):
     db.refresh(db_produto)
     return db_produto
 
+"""Atualizacao dos produtos"""
 def update_produto(db: Session, id_produto: str, dados: ProdutoUpdate):
     produto = get_produto(db, id_produto)
     if not produto:
@@ -42,6 +48,7 @@ def update_produto(db: Session, id_produto: str, dados: ProdutoUpdate):
     db.refresh(produto)
     return produto
 
+"""Delecao de produtos"""
 def delete_produto(db: Session, id_produto: str):
     produto = get_produto(db, id_produto)
     if not produto:
@@ -52,6 +59,7 @@ def delete_produto(db: Session, id_produto: str):
 
 # Avaliacoes:
 
+"""Obtencao das avaliacoes do produto"""
 def get_avaliacoes_por_produto(db: Session, id_produto: str):
     avaliacoes = (
         db.query(AvaliacaoPedido)
@@ -61,6 +69,7 @@ def get_avaliacoes_por_produto(db: Session, id_produto: str):
     )
     return avaliacoes
 
+"""Obtencao da media das avaliacoes do produto"""
 def get_media_avaliacoes(db: Session, id_produto: str):
     resultado = (
         db.query(func.avg(AvaliacaoPedido.avaliacao))
@@ -70,6 +79,7 @@ def get_media_avaliacoes(db: Session, id_produto: str):
     )
     return round(resultado, 2) if resultado else 0.0
 
+"""Obtencao dao numero de vendas por produto"""
 def get_vendas_por_produto(db: Session, id_produto: str):
     itens = (
         db.query(ItemPedido)
@@ -88,6 +98,9 @@ def get_vendas_por_produto(db: Session, id_produto: str):
         "ticket_medio": round(ticket, 2),
     }
 
+# Listagem de produtos:
+
+"""Obtencao do total de produtos"""
 def get_total_produtos(db: Session, q: str = '') -> int:
     query = db.query(Produto)
     if q:
